@@ -1,27 +1,21 @@
-from django.test import TestCase
-
-from events_manager.event_sourcing.repositories import EventStoreRepository
-from events_manager.event_sourcing.domain import TrackedObject
-from events_manager.event_sourcing.models import (
-    Event,
-    EventStore,
-)
-
-from model_mommy import mommy
 import mock
-
-import datetime
-
 from django.contrib.auth.models import User as UserModel
+from django.test import TestCase
+from django.utils import timezone
+from model_bakery import baker
+
+from events_manager.event_sourcing.domain import TrackedObject
+from events_manager.event_sourcing.models import Event, EventStore
+from events_manager.event_sourcing.repositories import EventStoreRepository
 
 
 class EventStoreRepositoryTestCase(TestCase):
     def setUp(self):
-        self.user = mommy.make(UserModel)
+        self.user = baker.make(UserModel)
 
         self.event = mock.Mock(
             id=1,
-            date=datetime.datetime.now(),
+            date=timezone.now(),
             user=self.user,
             diff=dict(),
             state=dict(),
@@ -29,7 +23,7 @@ class EventStoreRepositoryTestCase(TestCase):
 
         self.event.name = 'Evento de Criação'
 
-        self.event_store_model = mommy.make(
+        self.event_store_model = baker.make(
             EventStore,
             tracked_object_id=10,
         )

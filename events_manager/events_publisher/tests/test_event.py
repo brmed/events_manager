@@ -20,7 +20,7 @@ class EventTestCase(TestCase):
         self.event.signal = mock.Mock()
         self.event.connect_signal(self.handler)
         self.event.signal.connect.assert_called_once_with(
-            self.handler, dispatch_uid=self.handler.uid, weak=False)
+            self.handler.run, dispatch_uid=self.handler.uid, weak=False)
 
     def test_event_signal_is_singleton_for_events(self):
 

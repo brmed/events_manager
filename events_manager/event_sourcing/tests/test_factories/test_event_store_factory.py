@@ -1,27 +1,20 @@
-from django.test import TestCase
-from model_mommy import mommy
 import mock
-import datetime
+from django.contrib.auth.models import User as UserModel
+from django.test import TestCase
+from django.utils import timezone
+from model_bakery import baker
 
-from events_manager.event_sourcing.models import (
-    EventStore as EventStoreModel,
-    Event as EventModel
-)
-
-from events_manager.event_sourcing.domain import (
-    EventStore as EventStoreDomain,
-    Event as EventDomain,
-    TrackedObject,
-)
-
+from events_manager.event_sourcing.domain import Event as EventDomain
+from events_manager.event_sourcing.domain import EventStore as EventStoreDomain
+from events_manager.event_sourcing.domain import TrackedObject
 from events_manager.event_sourcing.factories import EventStoreFactory
-
-from django.contrib.auth.models import User as UserModel  
+from events_manager.event_sourcing.models import Event as EventModel
+from events_manager.event_sourcing.models import EventStore as EventStoreModel
 
 
 class EventStoreFactoryTestCase(TestCase):
     def setUp(self):
-        self.user = mommy.make(UserModel)
+        self.user = baker.make(UserModel)
 
         self.user_domain = mock.Mock(
             id=20,
@@ -30,11 +23,11 @@ class EventStoreFactoryTestCase(TestCase):
             email='rodrigo@moobile.com.br'
         )
 
-        self.event_store_model = mommy.make(
+        self.event_store_model = baker.make(
             EventStoreModel,
         )
 
-        self.event_model = mommy.make(
+        self.event_model = baker.make(
             EventModel,
             name='Evento de Criação',
             user=self.user,
@@ -99,7 +92,7 @@ class EventStoreFactoryTestCase(TestCase):
             signature='TrackedObject',
         )
 
-        date = datetime.datetime.now()
+        date = timezone.now()
 
         event_domain = self.factory.build_event_from_tracked_object(
             user=self.user_domain,

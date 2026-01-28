@@ -1,13 +1,9 @@
-from django.test import TestCase
-
-from events_manager.event_sourcing.domain import (
-    EventStore,
-    Event,
-    TrackedObject
-)
-
-import datetime
 import mock
+from django.test import TestCase
+from django.utils import timezone
+
+from events_manager.event_sourcing.domain import (Event, EventStore,
+                                                  TrackedObject)
 
 
 class EventStoreTestCase(TestCase):
@@ -22,7 +18,7 @@ class EventStoreTestCase(TestCase):
         self.attributes = dict(
             name='Evento de Criação',
             user=self.user_domain,
-            date=datetime.datetime.now(),
+            date=timezone.now(),
         )
 
         self.tracked_object = TrackedObject()

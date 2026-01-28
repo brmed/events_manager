@@ -1,8 +1,8 @@
+import mock
 from django.test import TestCase
+from django.utils import timezone
 
 from events_manager.event_sourcing.domain import Event
-import datetime
-import mock
 
 
 class EventTestCase(TestCase):
@@ -28,7 +28,7 @@ class EventTestCase(TestCase):
         self.attributes = dict(
             name='Evento de Atualização',
             user=self.user_domain,
-            date=datetime.datetime.now(),
+            date=timezone.now(),
         )
 
         self.event = Event(state=self.state, **self.attributes)

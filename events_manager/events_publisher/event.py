@@ -1,6 +1,7 @@
-from django.dispatch import Signal
-from django.conf import settings
 import logging
+
+from django.conf import settings
+from django.dispatch import Signal
 
 
 class Event:
@@ -9,7 +10,7 @@ class Event:
 
     def __new__(cls, *args, **kwargs):
         if not cls.__signals.get(cls):
-            cls.__signals[cls] = Signal(providing_args=[])
+            cls.__signals[cls] = Signal()
         cls.signal = cls.__signals[cls]
         return super().__new__(cls)
 
@@ -32,4 +33,4 @@ class Event:
         return response
 
     def connect_signal(self, handler):
-        self.signal.connect(handler, dispatch_uid=handler.uid, weak=False)
+        self.signal.connect(handler.run, dispatch_uid=handler.uid, weak=False)
